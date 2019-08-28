@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  数据扁平化并去重排序
+</body>
+</html>
+
+<script>
+  // var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+  // 请把两个数组 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 ['A', 'B', 'C', 'D']，合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']。
+
+  // 数组去重
+  function unique (array) {
+    var arr = [];
+    for (var i = 0; i < array.length; i++) {
+      for (var j = 0; j < arr.length; j++) {
+        if (array[i] === arr[j]) {
+          break;
+        }
+      }
+
+      if (arr.length === j) {
+        arr.push(array[i])
+      }
+    }
+
+    return arr;
+  }
+
+  // 数组扁平化
+  function flat (array) {
+    return array.reduce((prev, next) => {
+      return prev.concat(Array.isArray(next) ? flat(next) : next)
+    }, []);
+  }
+
+  // 数组排序
+</script>
