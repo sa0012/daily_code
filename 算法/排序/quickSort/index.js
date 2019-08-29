@@ -72,28 +72,21 @@ function swap(i, j, array) {
 (function() {
   function quickSort(arr) {
     if (arr.length <= 1) return arr;
-
-    //取数组最接近中间的数位基准，奇数与偶数取值不同，但不印象，当然，你可以选取第一个，或者最后一个数为基准，这里不作过多描述
+    // 定义一个标杆
     var pivotIndex = Math.floor(arr.length / 2);
     var pivot = arr.splice(pivotIndex, 1)[0];
-    //左右区间，用于存放排序后的数
-    var left = [];
-    var right = [];
+    // 左右数组， 分别用来存放大于标杆， 小于标杆的元素
+    let left = [];
+    let right = [];
 
-    console.log("基准为：" + pivot + " 时");
-    for (var i = 0; i < arr.length; i++) {
-      console.log("分区操作的第 " + (i + 1) + " 次循环：");
-      //小于基准，放于左区间，大于基准，放于右区间
+    for (let i = 0; i < arr.length; i++) {
       if (arr[i] < pivot) {
         left.push(arr[i]);
-        console.log("左边：" + arr[i]);
       } else {
         right.push(arr[i]);
-        console.log("右边：" + arr[i]);
       }
     }
-    //这里使用concat操作符，将左区间，基准，右区间拼接为一个新数组
-    //然后递归1，2步骤，直至所有无序区间都 只剩下一个元素 ，递归结束
+
     return quickSort(left).concat([pivot], quickSort(right));
   }
 
