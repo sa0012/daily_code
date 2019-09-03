@@ -16,7 +16,7 @@ Array.prototype.flatten || (Object.defineProperty(Array.prototype, 'flatten', {
   enumerable: false,
   configurable: true,
   writable: true
-}));
+}));  
 
 let arr = [1, [2, [3, 4, [5, 6]]], 7];
 let newArr = arr.flatten()
