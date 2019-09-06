@@ -45,23 +45,23 @@ function debounce(func, wait, immediate) {
 })();
 
 (function() {
-  function debounce(func, wait, immediate = true) {
-    let timeout, result;
+  function debounce(func, wait, immediate) {
+    var context, timeout, args, result;
 
     var debounced = function() {
-      var context = this;
-      var args = Array.prototype.slice(arguments);
+      context = this;
+      args = Array.prototype.slice.call(arguments);
 
       if (timeout) clearTimeout(timeout);
+
       if (immediate) {
         var callNow = !timeout;
         timeout = setTimeout(function() {
           timeout = null;
         }, wait);
-
         if (callNow) result = func.apply(context, args);
       } else {
-        timeout = setTimeout(function() {
+        setTimeout(function() {
           func.apply(context, args);
         }, wait);
       }
@@ -76,7 +76,6 @@ function debounce(func, wait, immediate) {
 
     return debounced;
   }
-
   var count = 1;
   var container = document.querySelector(".debounce");
   function getUserAction(e) {
