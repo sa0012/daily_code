@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul class="list"></ul>
+  </body>
+</html>
+
+<script>
+  var total = 100000;
+  var now = new Date();
+  var fragment = document.createDocumentFragment();
+  var oUl = document.querySelector(".list");
+  for (var i = 0; i < total; i++) {
+    var oLi = document.createElement("li");
+    oLi.innerText = i;
+    oLi.setAttribute("class", "li-" + i);
+    fragment.appendChild(oLi);
+  }
+  oUl.appendChild(fragment);
+  console.log("JS运行时间：", Date.now() - now);
+  // 浏览器事件循环：所有的macroTask, microTask执行完成 => rendering
+  setTimeout(() => {
+    console.log("页面渲染时间", Date.now() - now);
+  }, 0);
+
+  // JS运行时间： 530
+  // 页面渲染时间 4710
+</script>
