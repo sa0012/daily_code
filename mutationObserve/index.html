@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      
+      .btn {
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        background: skyblue;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="list">
+      <li class="item">1111</li>
+      <li class="item">2222</li>
+      <li class="item">3333</li>
+    </ul>
+    <div class="btn">点击添加</div>
+  </body>
+</html>
+
+<script>
+  let el = document.querySelector('.list');
+  let btn = document.querySelector('.btn');
+  // 注册监视器, 一旦发生变化会alert
+  let observer = new MutationObserver(() => {
+    alert("change");
+  });
+  // 开始监视
+  observer.observe(el, { childList: true, subtree: true });
+  // 停止监视, 释放资源
+  // observer.disconnect();
+  function createDOM() {
+    let oLi = document.createElement('li');
+    oLi.innerText = '4444';
+    oLi.setAttribute('class', 'item');
+    el.appendChild(oLi);
+  }
+
+  btn.addEventListener('click', createDOM)
+</script>
