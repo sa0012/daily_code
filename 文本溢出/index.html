@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .wrap {
+        height: 40px;
+        line-height: 20px;
+        overflow: hidden;
+      }
+      .wrap .text {
+        float: right;
+        margin-left: -5px;
+        width: 100%;
+        word-break: break-all;
+      }
+      .wrap::before {
+        float: left;
+        width: 5px;
+        content: "";
+        height: 40px;
+      }
+      .wrap::after {
+        float: right;
+        content: "...";
+        height: 20px;
+        line-height: 20px;
+        padding-right: 5px;
+        text-align: right;
+        width: 3em;
+        margin-left: -3em;
+        position: relative;
+        left: 100%;
+        top: -20px;
+        padding-right: 5px;
+        /* 显示更好的效果, 不加会有省略号插入到文字中的问题，视觉效果很差 */
+        background: -webkit-gradient(
+          linear,
+          left top,
+          right top,
+          from(rgba(255, 255, 255, 0)),
+          to(white),
+          color-stop(50%, white)
+        );
+        background: -moz-linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0),
+          white 50%,
+          white
+        );
+        background: -o-linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0),
+          white 50%,
+          white
+        );
+        background: -ms-linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0),
+          white 50%,
+          white
+        );
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0),
+          white 50%,
+          white
+        );
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="text">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos
+        labore sit vel itaque delectus atque quos magnam assumenda quod
+        architecto perspiciatis animi.
+      </div>
+    </div>
+  </body>
+</html>
