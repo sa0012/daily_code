@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body></body>
+  <input type="text" class="input" style="height: 40px; width: 400px;" />
+</html>
+
+<script>
+  /**
+   * 选中括号、引号，对其包含的所有字符进行高亮显示
+   * @param target 目标对象
+   */
+  function keywordHighlight(target) {
+    var selectionStart = target.selectionStart, // 选中的文本的起始位置
+      selectionEnd = target.selectionEnd, // 选中的文本的结束位置
+      text = target.value, // 输入框中的文本内容
+      selectValue = target.value.substring(selectionStart, selectionEnd); // 选中的文本
+
+    var tmpValue, // 待匹配的文本
+      tmpArr = [], // 用于存放切割后的待匹配文本的数组
+      stack = [], // 栈
+      endIndex; // 结束位置在tmpArr中的下标
+
+    // selectValue === '('，从前向后匹配
+    if (selectValue === "(") {
+      tmpValue = text.slice(selectionStart);
+      tmpArr = tmpValue.split("");
+
+      for (var i = 0, len = tmpArr.length; i < len; i++) {
+        if (tmpArr[i] === "(") {
+          stack.push(tmpArr[i]);
+        } else if (tmpArr[i] === ")") {
+          stack.pop();
+          if (stack.length === 0) {
+            endIndex = i + 1;
+            break;
+          }
+        }
+      }
+      if (endIndex) {
+        target.setSelectionRange(selectionStart, selectionStart + endIndex);
+      }
+    }
+    // selectValue === ')'，从后向前匹配
+    if (selectValue.trim() === ")") {
+      console.log(44444)
+      tmpValue = text.slice(0, selectionEnd);
+      tmpArr = tmpValue.split("");
+
+      for (var j = tmpArr.length - 1; j >= 0; j--) {
+        if (tmpArr[j] === ")") {
+          stack.push(tmpArr[j]);
+        } else if (tmpArr[j] === "(") {
+          stack.pop();
+          if (stack.length === 0) {
+            endIndex = j;
+            break;
+          }
+        }
+      }
+      if (endIndex || endIndex === 0) {
+        console.log(333333)
+        target.setSelectionRange(endIndex, selectionEnd);
+      }
+    }
+
+    if (selectValue.trim() === '"') {
+      // 获取引号出现次数
+      var count = text.slice(0, selectionEnd).split('"').length - 1;
+
+      if (count % 2 !== 0) {
+        // 引号出现次数为奇数，从前向后匹配
+        // slice获取匹配文本时length+1，获取匹配下标时length+1，故最后 +1+1
+        endIndex =
+          text.slice(selectionStart + 1, text.length).indexOf('"') + 1 + 1;
+
+        if (endIndex) {
+          target.setSelectionRange(selectionStart, selectionStart + endIndex);
+        }
+      } else {
+        // 引号出现次数为偶数，从后向前匹配
+        tmpValue = text.slice(0, selectionEnd).trim();
+        endIndex = tmpValue.slice(0, tmpValue.length - 1).lastIndexOf('"');
+
+        if (endIndex || endIndex === 0) {
+          target.setSelectionRange(endIndex, selectionEnd);
+        }
+      }
+    }
+  }
+
+  var oInput = document.querySelector(".input");
+  oInput.addEventListener("select", () => {
+    keywordHighlight(oInput);
+  });
+</script>
