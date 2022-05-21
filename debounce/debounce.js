@@ -1,16 +1,26 @@
-function debounce (fn, wait) {
-  let timeout = null;
+function debounce (fn, wait = 50, immediate = true) {
+  let timer, context, args = null;
 
-  return function () {
-    if (!!timeout) clearTimeout(timeout)
-    timeout = setTimeout(fn, wait);
+  const later = () => setTimeout(() => {
+    timer = null;
+    if (!immediate) {
+      fn.apply(context, args);
+      context = args = null;
+    }
+  }, wait);
+
+  return function (...params) {
+    if (!timer) {
+      timer = later();
+      if (immediate) {
+        fn.apply(this, params);
+      } else {
+        context = this;
+        args = params;
+      }
+    } else {
+      clearTimeout(timer);
+      timer = later();
+    }
   }
 }
-
-(function() {
-  let oInput = document.querySelector(".debounce");
-  function handler() {
-    console.log("防抖");
-  }
-  oInput.addEventListener("input", debounce(handler, 1000));
-})();

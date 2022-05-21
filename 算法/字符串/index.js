@@ -11,6 +11,18 @@ function searchStr(S, T) {
   return indexArr
 }
 
+function searchStr1 (S, T) {
+  if (S.length < T.length) return -1;
+  const arr = [];
+  for (let i = 0; i < S.length; i++) {
+    if (S.slice(i, T.length + 1) === T) {
+      arr.push(i);
+    }
+  }
+
+  return arr;
+}
+
 var S = '1234567890abcdefg1234';
 var T = '233';
 console.log(searchStr(S, T));

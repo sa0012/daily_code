@@ -50,3 +50,41 @@ function throttle (fn, delay) {
     }
   }
 }
+
+function throttle (fn, wait = 50, options = {}) {
+  let result, timer, context, args = null;
+  options = options || {}
+  let previous = 0;
+
+  let later = function () {
+    timer = null;
+    previous = !options.leading ? 0 : Date.now();
+    result = fn.apply(context, args);
+    context = args = null;
+  }
+
+  return function (...params) {
+    if (!previous && !options.leading) {
+      previous = Date.now();
+    }
+
+    let remaining = wait - (Date.now() - previous);
+    context = this;
+    args = params;
+
+    if (remaining <= 0 || remaining > wait) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+
+      previous = Date.now();
+      result = fn.apply(this, params);
+      if (!timer) context = args = null;
+    } else if (
+      !timer && !options.trailing
+    ) {
+      timer = setTimeout(later, remaining)
+    }
+  }
+}

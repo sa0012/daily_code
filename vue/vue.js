@@ -508,6 +508,7 @@
    */
   var bailRE = new RegExp(("[^" + (unicodeRegExp.source) + ".$_\\d]"));
   function parsePath (path) {
+    console.log(path, 'path')
     if (bailRE.test(path)) {
       return
     }
@@ -720,7 +721,6 @@
 
   Dep.prototype.addSub = function addSub (sub) {
     this.subs.push(sub);
-    console.log(this.subs, 'this.subs')
   };
 
   Dep.prototype.removeSub = function removeSub (sub) {
@@ -1034,15 +1034,15 @@
     }
 
     var childOb = !shallow && observe(val);
+    // console.log(val, 'val')
     Object.defineProperty(obj, key, {
       enumerable: true,
       configurable: true,
       get: function reactiveGetter () {
         var value = getter ? getter.call(obj) : val;
-        console.log(Dep.target, 'dep.target')
+        console.log(value, 'value---get')
         if (Dep.target) {
           dep.depend();
-          console.log(value, 'get-dep')
           if (childOb) {
             childOb.dep.depend();
             if (Array.isArray(value)) {
@@ -1070,6 +1070,7 @@
           val = newVal;
         }
         childOb = !shallow && observe(newVal);
+        console.log(newVal, 'childOb')
         dep.notify();
       }
     });
@@ -3574,6 +3575,7 @@
       }
       // set parent
       vnode.parent = _parentVnode;
+      console.log(vnode, 'vnode')
       return vnode
     };
   }
@@ -4266,7 +4268,6 @@
     // 3. If a component is destroyed during a parent component's watcher run,
     //    its watchers can be skipped.
     queue.sort(function (a, b) { return a.id - b.id; });
-
     // do not cache length because more watchers might be pushed
     // as we run existing watchers
     for (index = 0; index < queue.length; index++) {
@@ -4346,7 +4347,6 @@
    * pushed when the queue is being flushed.
    */
   function queueWatcher (watcher) {
-    console.log(watcher.id, 'watcher.id')
     var id = watcher.id;
     if (has[id] == null) {
       has[id] = true;
@@ -4434,20 +4434,18 @@
     this.value = this.lazy
       ? undefined
       : this.get();
-      
-    console.log(this.value, this.lazy, 'this.value-watcher')
   };
 
   /**
    * Evaluate the getter, and re-collect dependencies.
    */
   Watcher.prototype.get = function get () {
-    console.log(111111)
     pushTarget(this);
     var value;
     var vm = this.vm;
     try {
       value = this.getter.call(vm, vm);
+      console.log(this.getter, 'getter')
     } catch (e) {
       if (this.user) {
         handleError(e, vm, ("getter for watcher \"" + (this.expression) + "\""));
@@ -4471,7 +4469,6 @@
    */
   Watcher.prototype.addDep = function addDep (dep) {
     var id = dep.id;
-    console.log(id, 'addDep-id')
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id);
       this.newDeps.push(dep);
@@ -4513,6 +4510,7 @@
     } else if (this.sync) {
       this.run();
     } else {
+      console.log('queueWatcher')
       queueWatcher(this);
     }
   };
@@ -4708,7 +4706,7 @@
       }
     }
     // observe data
-    console.log(data, 'asRootData')
+    // console.log(data, 'asRootData')
     observe(data, true /* asRootData */);
   }
 
@@ -4948,7 +4946,6 @@
       // a flag to avoid this being observed
       vm._isVue = true;
       // merge options
-      console.log(options, '_init_options_')
       if (options && options._isComponent) {
         console.log('initInterComponent')
         // optimize internal component instantiation
@@ -5011,10 +5008,8 @@
 
   function resolveConstructorOptions (Ctor) {
     var options = Ctor.options;
-    console.log(Ctor.super)
     // 存在子組件的情況
     if (Ctor.super) {
-      console.log(1111)
       var superOptions = resolveConstructorOptions(Ctor.super);
       var cachedSuperOptions = Ctor.superOptions;
       if (superOptions !== cachedSuperOptions) {
@@ -11796,6 +11791,7 @@
     options
   ) {
     var ast = parse(template.trim(), options);
+    console.log(ast, 'ast')
     if (options.optimize !== false) {
       optimize(ast, options);
     }

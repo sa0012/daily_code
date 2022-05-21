@@ -36,5 +36,14 @@ function isPalindrome2(str) {
   return true;
 }
 
+function isPalindrome3 (str) {
+  if (typeof str !== 'string') return false;
+  for (let i = 0, j = str.length - 1; i < j; i++, j--) {
+    if (str[i] !== str[j]) return false;
+  }
+
+  return true;
+}
+
 console.log(isPalindrome1(121));
 console.log(isPalindrome1(3344));

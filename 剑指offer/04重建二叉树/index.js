@@ -29,4 +29,16 @@
 function reConstructBinaryTree(pre, vin)
 {
     // write code here
+    if (!pre.length || !vin.length) return null;
+
+    // 找到跟节点
+		let index = vin.indexOf(pre[0]);
+		let left = vin.slice(0, index);
+		let right = vin.slice(index + 1);
+
+    return {
+			val: pre[0],
+			left: reConstructBinaryTree(pre.slice(1, index + 1), left),
+			right: reConstructBinaryTree(pre.slice(index + 1), right)
+    }
 }

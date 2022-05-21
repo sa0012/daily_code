@@ -18,7 +18,20 @@
     return ret.join('') + newStr + (rest && `.${rest}`);
   }
 
-  console.log(parseToNum(10000000000000.111))
+  function toNum(num) {
+    let result = (num).toString().split('.');
+    let ret = result[0].split('');
+    let rest = result[1].join('');
+    let newStr = '';
+
+    while (ret.length > 3) {
+      newStr += ',' + ret.splice(-3, 3).join('');
+    }
+
+    return ret.join('' + newStr + (rest && `.${rest}`))
+  }
+
+  console.log(parseToNum(100000.111))
 })();
 
 (function () {
@@ -34,4 +47,15 @@
   }
 
   console.log(parseToNum(10000000000000.1234))
+})();
+
+(function () {
+    function getLocationUrl(str) {
+      return str.replace(/(?<=[e\.zto\.com\/e\/])(?=([a-zA-Z0-9]*))(\/)$/g, '###')
+    }
+
+    var str = 'https://e.zto.com/e/zt8dvDgajRXPm6Qq0hK5FvOw/plusSite'
+    console.log(getLocationUrl(str), 'getLocationUrl(str)')
+    var reg = 'https://e.zto.com/e/zt8dvDgajRXPm6Qq0hK5FvOw/plusSite'.match(/(?<=e\.zto\.com\/([a-zA-Z0-9]*)\/)([a-zA-Z0-9]*)/g)
+    console.log(reg, 'reg----')
 })();

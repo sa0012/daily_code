@@ -8,6 +8,15 @@ function selfCall(context) {
   delete context[fn];
 }
 
+function myCall (context) {
+  context = typeof context === 'object' ? context : window;
+  let fn = Symbol(this);
+  context[fn] = this;
+  const args = [...arguments].slice.call(1);
+  context[fn](...args);
+  delete context[fn];
+}
+
 Function.prototype.selfCall ||
   Object.defineProperty(Function.prototype, "selfCall", {
     value: selfCall,
@@ -37,3 +46,14 @@ var obj1 = {
 
 obj.getName.call(obj1); // 这是obj this指向， {name: "eeee", age: 24, getName: ƒ}
 obj.getName.selfCall(obj1)
+
+(function () {
+  function selfCall (context) {
+    context = typeof context === 'object' ? context : window
+    const fn = Symbol()
+    context[fn] = this
+    const args = [...arguments].slice(1)
+    context[fn](...args)
+    delete context[fn]
+  }
+})();

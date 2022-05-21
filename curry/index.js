@@ -2,11 +2,8 @@
   // 第三版
   function curry(fn, args, holes) {
     length = fn.length;
-
     args = args || [];
-
     holes = holes || [];
-
     return function() {
       var _args = args.slice(0),
         _holes = holes.slice(0),
@@ -15,7 +12,6 @@
         arg,
         i,
         index = 0;
-
       for (i = 0; i < arguments.length; i++) {
         arg = arguments[i];
         // 处理类似 fn(1, _, _, 4)(_, 3) 这种情况，index 需要指向 holes 正确的下标

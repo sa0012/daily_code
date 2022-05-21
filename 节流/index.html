@@ -80,4 +80,151 @@
       return result;
     };
   };
+
+function now () {
+  return Date.now()
+}
+
+(function () {
+  function throttle (fn, wait, options) {
+    let context, args, result;
+    let timer = null;
+    let previous = 0;
+    options = options || {}
+
+    const later = function () {
+      previous = options.leading === false ? 0 : now();
+      timer = null;
+      result = fn.apply(context, args);
+      context = args = null;
+    }
+
+    return function () {
+      let current = now()
+      if (!previous && options.leading === false) {
+        previous = current;
+      }
+
+      let remaining = wait - (current - previous);
+      context = this;
+      args = arguments;
+
+      if (remaining <= 0 || remaining > wait) {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+          previous = current;
+          result = fn.apply(context, args);
+          if (!timer) context = args = null;
+        } else if (!timer && options.trailing !== false) {
+          timer = setTimeout(later, remaining);
+        }
+      }
+      return result;
+    }
+  }
+})();
+
+function myBind (context) {
+  const args = Array.prototype.slice.call(arguments, 1);
+  const _this = this;
+  const Fn = function () {}
+  const bindFn = function () {
+    const bindArgs = Array.prototype.slice.call(arguments);
+    return _this.apply(
+      this instanceof bindFn ? this : context,
+      bindArgs.concat(args)
+    )
+  }
+
+  if (this.prototype) Fn.prototype = this.prototype
+  bindFn.prototype = new Fn();
+  return bindFn;
+}
+
+function myCall (context) {
+  context = typeof context === 'object' ? context : window;
+  const fn = Symbol(this);
+  context[fn] = this;
+  const args = Array.prototype.slice.call(arguments, 1);
+  context[fn](...args)
+  delete context[fn];
+}
+
+function curry (fn) {
+ const length = fn.length;
+ const args = Array.prototype.slice.call(arguments, 1);
+
+ return function () {
+   const newArgs = Array.prototype.slice.call(arguments);
+   const finalArgs = newArgs.concat(args);
+
+   if (newArgs.length < length) {
+     return curry.call(this, fn, finalArgs);
+   } else {
+     return fn.apply(this, finalArgs)
+   }
+ }
+}
+
+function isObject (target) {
+  const type = typeof target
+  return target !== null && (
+    type === 'object' ||
+    type === 'function'
+  )
+}
+
+function clone (obj, map = new WeakMap()) {
+  if (!isObject(obj) || map.get(obj)) return obj;
+  let cloneTarget = Array.isArray(target) ? [] : {};
+  map.set(obj, cloneTarget)
+  for (let key in obj) {
+    cloneTarget[key] = clone(obj[key], map)
+  }
+
+  return cloneTarget;
+}
+
+function compose (middleware) {
+  if (!Array.isArray(middleware)) throw new TypeError('')
+  for (const fn in middleware) {
+    if (typeof fn !== 'function') throw new TypeError('')
+  }
+
+  return function (context, next) {
+    let index = -1;
+    return dispatch(0);
+
+    function dispatch (i) {
+      if (i <= index) return Promise.reject(
+        new Error('next called multiple timers')
+      );
+
+      index = i;
+      let fn = middleware[i];
+      if (i === middleware.length) fn = next;
+      if (!fn) return Promise.resolve();
+
+      try {
+        return Promise.resolve(
+          fn(context, dispatch.bind(null, i + 1))
+        )
+      } catch (err) {
+        return Promise.reject(err)
+      }
+    }
+  }
+}
+
+function flatten (array, depth = 1) {
+  if (depth === 0) return array
+  return array.reduce((prev, cur) => {
+    if (Array.isArray(cur)) {
+      return [...prev, ...flatten(cur, depth - 1)]
+    } {
+      return [...prev, ...cur]
+    }
+  }, [])
+}
 </script>

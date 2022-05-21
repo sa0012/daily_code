@@ -1,12 +1,10 @@
 (function () {
   function curry(fn, args) {
     var length = fn.length;
-    var args = args || [];
+    args = args || [];
   
-    console.log(length, args, 'init')
     return function(){
         newArgs = args.concat(Array.prototype.slice.call(arguments));
-        console.log(newArgs.length, length, 'length')
         if (newArgs.length < length) {
             return curry.call(this,fn,newArgs);
         }else{
@@ -21,10 +19,10 @@
   
   var multi = curry(multiFn);
   
-  // console.log(multi(2)(3)(4));
-  // console.log(multi(2, 3, 4));
-  // console.log(multi(2)(3, 4));
-  // console.log(multi(2, 3)(4));
+  console.log(multi(2)(3)(4));
+  console.log(multi(2, 3, 4));
+  console.log(multi(2)(3, 4));
+  console.log(multi(2, 3)(4));
 })();
 
 (function () {
@@ -43,24 +41,34 @@
   
   var multi = curry(multiFn);
   
-  console.log(multi(2)(3)(4));
+  // console.log(multi(2)(3)(4));
   // console.log(multi(2, 3, 4));
   // console.log(multi(2)(3, 4));
   // console.log(multi(2, 3)(4));
 })();
 
 (function () {
-  function curry(fn, args) {
-    var length = fn.length;
-    var args = args || [];
+  function curry (fn, args) {
+    const length = fn && fn.length
+    args = args || []
 
     return function () {
-      var newArgs = args.concat(Array.prototype.slice.call(arguments));
+      let newArgs = args.concat(Array.prototype.slice.call(arguments));
       if (newArgs.length < length) {
-        return curry.call(this, fn, newArgs);;
+        return curry.call(this, fn, newArgs);
       } else {
-        return fn.apply(this, newArgs);
+        return fn.apply(this, newArgs)
       }
     }
   }
+  function multiFn(a, b, c) {
+    return a * b * c;
+  }
+  
+  var multi = curry(multiFn);
+  
+  console.log(multi(2)(3)(4));
+  // console.log(multi(2, 3, 4));
+  // console.log(multi(2)(3, 4));
+  // console.log(multi(2, 3)(4));
 })();

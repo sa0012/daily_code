@@ -35,6 +35,16 @@ function fibonacci2(n) {
 
 console.log(fibonacci2(6));
 
+function fibonacci0 (n) {
+  let f = 1, g = 0;
+  while (n--) {
+    g += f;
+    f = g - f;
+  }
+
+  return g;
+}
+
 /**
  * 方法三
  * @param {number} n 

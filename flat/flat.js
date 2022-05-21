@@ -1,6 +1,6 @@
 const flatten = function (depth = 1) {
   let arr = Array.prototype.slice.call(this)
-  if (depth = 0) return [...arr]
+  if (depth === 1) return [...arr]
 
   return arr.reduce((prev, cur) => {
     if (Array.isArray(cur)) {
@@ -21,3 +21,18 @@ Array.prototype.flatten || (Object.defineProperty(Array.prototype, 'flatten', {
 let arr = [1, [2, [3, 4, [5, 6]]], 7];
 let newArr = arr.flatten()
 console.log(newArr)
+
+(function () {
+  const flatten = function (depth = 1) {
+    let arr = Array.prototype.slice.call(this);
+    if (depth === 0) return [...arr];
+
+    return arr.reduce((prev, cur) => {
+      if (Array.isArray(cur)) {
+        return [...prev, ...flatten.call(cur, depth - 1)];
+      } else {
+        return [...prev, ...cur];
+      }
+    }, []);
+  }
+})();
